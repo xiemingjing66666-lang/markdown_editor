@@ -26,7 +26,7 @@
 
 ## 安装版
 
-双击 `release/Zhijian-Setup-0.3.1.exe`，安装到 `C:\Program Files\Zhijian`，创建开始菜单和桌面快捷方式，并带有卸载程序。安装需要管理员权限；设置和文档数据保存在当前用户目录，升级或卸载程序不会删除。
+双击 `release/Zhijian-Setup-0.3.2.exe`。默认安装到 `C:\Program Files\Zhijian`，也可以在安装向导里改到其他位置；为保证 .NET 运行时正常，安装路径需要只含英文字母、数字和空格。安装程序会创建开始菜单和桌面快捷方式，并带有卸载程序。安装需要管理员权限；设置和文档数据保存在当前用户目录，升级或卸载程序不会删除。
 
 安装时默认勾选“将纸间加入 Markdown 文件的打开方式”。安装后打开设置 → 打开方式 → 设为默认，在系统对话框中选择纸间并勾选始终使用即可。Windows 10/11 会保留最终的默认程序确认，安装程序不会绕过这一步。
 
@@ -34,7 +34,7 @@
 
 ## 便携版
 
-便携版在 `release/Zhijian-0.3.1-win64.zip`。
+便携版在 `release/Zhijian-0.3.2-win64.zip`。
 
 1. 解压到任意位置。
 2. 双击 `启动纸间.cmd`。
@@ -73,8 +73,8 @@ npm run package
 输出：
 
 - `release/Zhijian/`：PyInstaller 目录版。
-- `release/Zhijian-0.3.1-win64.zip`：便携包，解压后运行 `启动纸间.cmd`。
-- `release/Zhijian-Setup-0.3.1.exe`：Windows 安装程序。
+- `release/Zhijian-0.3.2-win64.zip`：便携包，解压后运行 `启动纸间.cmd`。
+- `release/Zhijian-Setup-0.3.2.exe`：Windows 安装程序。
 
 打包需要 `pyinstaller` 与 `Pillow`，见 `requirements-dev.txt`。
 

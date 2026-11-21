@@ -1,5 +1,5 @@
 ﻿#define AppName "纸间"
-#define AppVersion "0.3.1"
+#define AppVersion "0.3.2"
 #define AppPublisher "纸间"
 #define AppExeName "Zhijian.exe"
 
@@ -11,7 +11,7 @@ AppVerName={#AppName} {#AppVersion}
 AppPublisher={#AppPublisher}
 AppCopyright=Copyright (c) 2026
 DefaultDirName={autopf}\Zhijian
-DisableDirPage=yes
+DisableDirPage=no
 DisableProgramGroupPage=yes
 DefaultGroupName=纸间
 PrivilegesRequired=admin
@@ -66,3 +66,39 @@ Filename: "{app}\{#AppExeName}"; Description: "启动纸间"; Flags: nowait post
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"
+
+[Code]
+function IsAsciiPath(const Value: String): Boolean;
+var
+  Index: Integer;
+begin
+  Result := True;
+  for Index := 1 to Length(Value) do
+  begin
+    if Ord(Value[Index]) > 127 then
+    begin
+      Result := False;
+      Exit;
+    end;
+  end;
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+begin
+  Result := True;
+  if CurPageID = wpSelectDir then
+  begin
+    if not IsAsciiPath(WizardDirValue) then
+    begin
+      MsgBox('纸间的 .NET 运行时目前不支持含中文的安装路径。请选择只含英文字母、数字和空格的路径。', mbError, MB_OK);
+      Result := False;
+    end;
+  end;
+end;
+
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+begin
+  Result := '';
+  if not IsAsciiPath(ExpandConstant('{app}')) then
+    Result := '纸间需要安装到纯英文路径。请返回上一步，选择只含英文字母、数字和空格的路径。';
+end;

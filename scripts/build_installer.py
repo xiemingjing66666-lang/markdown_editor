@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / "installer" / "zhijian.iss"
-OUTPUT = ROOT / "release" / "Zhijian-Setup-0.3.1.exe"
+OUTPUT = ROOT / "release" / "Zhijian-Setup-0.3.2.exe"
 
 
 def find_iscc() -> Path | None:

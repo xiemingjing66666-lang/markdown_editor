@@ -1,9 +1,9 @@
 @echo off
 setlocal
-set "SETUP=%~dp0Zhijian-Setup-0.3.1.exe"
-set "DEST=%PUBLIC%\Zhijian-Setup-0.3.1.exe"
+set "SETUP=%~dp0Zhijian-Setup-0.3.2.exe"
+set "DEST=%PUBLIC%\Zhijian-Setup-0.3.2.exe"
 if not exist "%SETUP%" (
-  echo Zhijian-Setup-0.3.1.exe was not found next to this launcher.
+  echo Zhijian-Setup-0.3.2.exe was not found next to this launcher.
   pause
   exit /b 1
 )
