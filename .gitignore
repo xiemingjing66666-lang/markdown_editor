@@ -1,0 +1,11 @@
+node_modules/
+dist/
+release/
+release-debug/
+.tmp/
+__pycache__/
+*.pyc
+*.pyo
+*.spec
+*.log
+.DS_Store

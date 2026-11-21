@@ -1,0 +1,40 @@
+{
+  "name": "zhijian",
+  "productName": "纸间",
+  "version": "0.3.1",
+  "description": "一个安静的 Markdown 编辑器",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build && python -m app.main",
+    "build": "node scripts/build.mjs",
+    "start": "npm run build && python -m app.main",
+    "app": "python -m app.main",
+    "test": "vitest run && python -m unittest discover -s tests -p \"test_*.py\"",
+    "test:ui": "npm run build && node scripts/native-e2e.mjs",
+    "test:all": "npm test && npm run test:ui",
+    "package": "npm run build && python scripts/package.py",
+    "installer": "npm run package && python scripts/build_installer.py"
+  },
+  "devDependencies": {
+    "@codemirror/commands": "^6.8.1",
+    "@codemirror/lang-markdown": "^6.3.4",
+    "@codemirror/language": "^6.11.3",
+    "@codemirror/search": "^6.5.11",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.38.1",
+    "@fontsource-variable/instrument-sans": "^5.2.6",
+    "@fontsource-variable/newsreader": "^5.2.6",
+    "@fontsource/ibm-plex-mono": "^5.2.6",
+    "@lezer/highlight": "^1.2.1",
+    "@types/katex": "^0.16.8",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^22.15.0",
+    "katex": "^0.19.1",
+    "markdown-it": "^14.1.0",
+    "playwright-core": "^1.54.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0",
+    "vitest": "^3.2.4"
+  }
+}

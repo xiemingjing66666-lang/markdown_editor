@@ -1,0 +1,249 @@
+.preview {
+  overflow: auto;
+  padding: 54px max(40px, calc((100% - var(--measure-text)) / 2)) 40vh;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--editor-size);
+  line-height: 1.74;
+  overflow-wrap: anywhere;
+  scrollbar-color: color-mix(in srgb, var(--muted) 32%, transparent) transparent;
+  scrollbar-width: thin;
+}
+
+.preview::-webkit-scrollbar {
+  width: 11px;
+}
+
+.preview::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--muted) 34%, transparent);
+  background-clip: content-box;
+}
+
+.preview:hover::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--muted) 52%, transparent);
+  background-clip: content-box;
+}
+
+.preview::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.preview > :first-child {
+  margin-top: 0;
+}
+
+.preview > :last-child {
+  margin-bottom: 0;
+}
+
+.preview p {
+  margin: 0 0 1.05em;
+}
+
+.preview h1,
+.preview h2,
+.preview h3,
+.preview h4,
+.preview h5,
+.preview h6 {
+  margin: 1.55em 0 0.5em;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.22;
+}
+
+.preview h1 {
+  margin-top: 0.2em;
+  margin-bottom: 0.45em;
+  font-size: 2.35rem;
+  letter-spacing: -0.035em;
+}
+
+.preview h2 {
+  font-size: 1.62rem;
+  letter-spacing: -0.026em;
+}
+
+.preview h3 {
+  font-size: 1.22rem;
+  letter-spacing: -0.018em;
+}
+
+.preview h4 {
+  font-size: 1.04rem;
+  letter-spacing: -0.01em;
+}
+
+.preview h5 {
+  font-size: 0.94rem;
+  letter-spacing: 0;
+}
+
+.preview h6 {
+  color: var(--ink-2);
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+}
+
+.preview strong {
+  font-weight: 650;
+}
+
+.preview em {
+  font-style: italic;
+}
+
+.preview del {
+  color: var(--muted);
+}
+
+.preview a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-line);
+  text-underline-offset: 0.16em;
+  text-decoration-thickness: 1px;
+}
+
+.preview a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.preview ul,
+.preview ol {
+  margin: 0.3em 0 1.05em;
+  padding-left: 1.45em;
+}
+
+.preview li {
+  margin: 0.28em 0;
+  padding-left: 0.15em;
+}
+
+.preview li::marker {
+  color: var(--muted);
+}
+
+.preview li > p {
+  margin: 0.2em 0;
+}
+
+.preview blockquote {
+  margin: 1.35em 0;
+  padding: 0.1em 0 0.1em 1.2em;
+  border-left: 2px solid var(--accent-line);
+  color: var(--ink-2);
+  font-style: italic;
+}
+
+.preview blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.preview code {
+  padding: 0.12em 0.34em;
+  border-radius: 4px;
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+}
+
+.preview pre {
+  margin: 1.35em 0;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--code-bg);
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.68;
+  overflow-x: auto;
+}
+
+.preview pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+
+.preview hr {
+  margin: 2.4em 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.preview img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.6em auto;
+  border-radius: 5px;
+}
+
+.preview table {
+  width: 100%;
+  margin: 1.4em 0;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: 0.82em;
+  line-height: 1.5;
+}
+
+.preview th {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line-strong);
+  color: var(--ink-2);
+  font-weight: 560;
+  text-align: left;
+}
+
+.preview td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.preview tr:last-child td {
+  border-bottom: 0;
+}
+
+.preview .md-image-missing {
+  color: var(--muted);
+  font-style: italic;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+}
+
+.preview .math-inline .katex {
+  font-size: 1.06em;
+}
+
+.preview .math-block {
+  margin: 1.35em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2em 0;
+  scrollbar-width: thin;
+}
+
+.preview .math-block .katex-display {
+  margin: 0;
+}
+
+.preview .math-block .katex {
+  font-size: 1.15em;
+}
+
+.preview .katex-error {
+  color: var(--danger) !important;
+}
+
+@media (max-width: 760px) {
+  .preview {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+}
