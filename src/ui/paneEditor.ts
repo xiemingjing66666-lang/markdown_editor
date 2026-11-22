@@ -3,6 +3,7 @@ import { EditorView } from "@codemirror/view";
 import { createEditorState, createEditorView } from "../editor/editor";
 import { renderMarkdown, type OutlineHeading } from "../core/markdown";
 import type { Doc } from "../core/model";
+import { openLightbox } from "./lightbox";
 
 export interface PaneEditorCallbacks {
   onTextChange: (docId: string, text: string) => void;
@@ -269,6 +270,12 @@ export class PaneEditor {
   private handlePreviewClick(event: MouseEvent): void {
     const target = event.target;
     if (!(target instanceof Element)) return;
+    const media = target.closest("img, video");
+    if (media instanceof HTMLImageElement || media instanceof HTMLVideoElement) {
+      event.preventDefault();
+      openLightbox(media, media);
+      return;
+    }
     const link = target.closest("a");
     if (!link) return;
     const external = link.getAttribute("data-external");

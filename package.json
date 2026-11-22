@@ -1,7 +1,7 @@
 {
   "name": "zhijian",
   "productName": "纸间",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "一个安静的 Markdown 编辑器",
   "private": true,
   "type": "module",

@@ -1,5 +1,5 @@
 ﻿#define AppName "纸间"
-#define AppVersion "0.3.2"
+#define AppVersion "0.4.0"
 #define AppPublisher "纸间"
 #define AppExeName "Zhijian.exe"
 

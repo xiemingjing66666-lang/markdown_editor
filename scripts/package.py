@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RELEASE = ROOT / "release"
 NAME = "Zhijian"
-VERSION = "0.3.2"
+VERSION = "0.4.0"
 
 
 def main() -> int:

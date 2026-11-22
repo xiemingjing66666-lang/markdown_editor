@@ -12,6 +12,7 @@ import "./styles/preview.css";
 import "./styles/overlays.css";
 import "./styles/settings.css";
 import "./styles/outline.css";
+import "./styles/lightbox.css";
 import { App } from "./app";
 import { resolveBridge } from "./bridge";
 import { applyPreferences, loadPreferences } from "./core/preferences";

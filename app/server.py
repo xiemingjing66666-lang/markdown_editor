@@ -18,6 +18,8 @@ IMAGE_EXTENSIONS = {
     ".avif",
     ".bmp",
 }
+VIDEO_EXTENSIONS = {".mp4", ".webm", ".ogv", ".ogg", ".mov", ".m4v"}
+MEDIA_EXTENSIONS = IMAGE_EXTENSIONS | VIDEO_EXTENSIONS
 
 
 class AppServer:
@@ -91,23 +93,59 @@ class AppServer:
                 if (
                     not target.is_absolute()
                     or not target.is_file()
-                    or target.suffix.lower() not in IMAGE_EXTENSIONS
+                    or target.suffix.lower() not in MEDIA_EXTENSIONS
                 ):
                     self.send_error(404)
                     return
                 content_type = mimetypes.guess_type(target.name)[0] or "application/octet-stream"
                 size = target.stat().st_size
-                self.send_response(200)
+                start = 0
+                end = size - 1
+                partial = False
+                range_header = self.headers.get("Range", "")
+                if range_header.startswith("bytes="):
+                    spec = range_header[6:].split(",", 1)[0].strip()
+                    first, _, last = spec.partition("-")
+                    try:
+                        if first:
+                            start = int(first)
+                            end = int(last) if last else size - 1
+                        elif last:
+                            length = int(last)
+                            start = max(0, size - length)
+                            end = size - 1
+                        else:
+                            raise ValueError
+                    except ValueError:
+                        self.send_error(416)
+                        return
+                    if start < 0 or start >= size or end < start:
+                        self.send_error(416)
+                        return
+                    end = min(end, size - 1)
+                    partial = True
+                length = end - start + 1 if partial else size
+                self.send_response(206 if partial else 200)
                 self.send_header("Content-Type", content_type)
-                self.send_header("Content-Length", str(size))
+                self.send_header("Content-Length", str(length))
+                self.send_header("Accept-Ranges", "bytes")
+                if partial:
+                    self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
                 self.send_header("Cache-Control", "private, max-age=300")
                 self.end_headers()
                 if head_only:
                     return
                 try:
                     with target.open("rb") as file:
-                        while chunk := file.read(64 * 1024):
+                        if start:
+                            file.seek(start)
+                        remaining = length
+                        while remaining > 0:
+                            chunk = file.read(min(64 * 1024, remaining))
+                            if not chunk:
+                                break
                             self.wfile.write(chunk)
+                            remaining -= len(chunk)
                 except (BrokenPipeError, ConnectionResetError, OSError):
                     return
 

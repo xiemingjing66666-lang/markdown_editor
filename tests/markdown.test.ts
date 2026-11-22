@@ -63,6 +63,18 @@ describe("markdown rendering", () => {
     expect(html).toContain("data-external=\"https://example.com\"");
   });
 
+  it("renders local video files as playable video", () => {
+    const html = renderMarkdown(
+      "![演示](./clip.mp4)",
+      "C:\\notes\\note.md",
+    );
+    expect(html).toContain("<video");
+    expect(html).toContain("controls");
+    expect(html).toContain("/media?path=");
+    expect(html).toContain('aria-label="演示"');
+    expect(html).not.toContain("<img");
+  });
+
   it("generates unique heading ids", () => {
     const html = renderMarkdown("## 重复\n\n## 重复\n", null);
     expect(html).toContain('id="重复"');

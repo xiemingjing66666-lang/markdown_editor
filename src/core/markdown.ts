@@ -26,6 +26,16 @@ const md = new MarkdownIt({
   breaks: false,
 });
 
+const VIDEO_EXTENSION = /\.(mp4|webm|ogv|ogg|mov|m4v)(?:[?#].*)?$/i;
+
+function isVideoSource(source: string): boolean {
+  return /^data:video\//i.test(source) || VIDEO_EXTENSION.test(source);
+}
+
+function escapeAttribute(value: string): string {
+  return md.utils.escapeHtml(value);
+}
+
 mathPlugin(md);
 
 function slugify(value: string): string {
@@ -56,17 +66,23 @@ md.renderer.rules.image = (tokens, index, options, env, self) => {
   const token = tokens[index];
   const environment = env as RenderEnvironment;
   if (!token) return "";
-  const source = token.attrGet("src") ?? "";
+  let source = token.attrGet("src") ?? "";
+  const alt = token.content || (isVideoSource(source) ? "视频" : "图片");
   if (source && !/^(https?:|data:|blob:|paperleaf:)/i.test(source)) {
     if (!environment.docPath) {
-      const alt = token.content || "图片";
-      return `<span class="md-image-missing">${md.utils.escapeHtml(alt)}</span>`;
+      return `<span class="md-image-missing">${escapeAttribute(alt)}</span>`;
     }
     const absolute = isAbsolutePath(source)
       ? source
       : resolveRelative(environment.docPath, source);
-    if (absolute) token.attrSet("src", toMediaUrl(absolute));
+    if (absolute) {
+      source = toMediaUrl(absolute);
+    }
   }
+  if (isVideoSource(token.attrGet("src") ?? "")) {
+    return `<span class="md-video"><video src="${escapeAttribute(source)}" controls preload="metadata" playsinline aria-label="${escapeAttribute(alt)}"></video></span>`;
+  }
+  if (source) token.attrSet("src", source);
   token.attrSet("loading", "lazy");
   token.attrSet("decoding", "async");
   return self.renderToken(tokens, index, options);

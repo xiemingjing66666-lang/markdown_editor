@@ -14,6 +14,7 @@ const notesPath = path.join(work, "notes.md");
 const fieldPath = path.join(work, "field-notes.md");
 const imageNotePath = path.join(work, "image-note.md");
 const imagePath = path.join(work, "paper.svg");
+const videoPath = path.join(work, "clip.mp4");
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="720" height="260" viewBox="0 0 720 260">
   <defs>
@@ -90,12 +91,21 @@ await writeFile(
 );
 await writeFile(imagePath, svg, "utf8");
 await writeFile(
+  videoPath,
+  Buffer.from([
+    0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70, 0x6d, 0x70, 0x34, 0x32,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  ]),
+);
+await writeFile(
   imageNotePath,
   `# 图像
 
 一张纸的颜色，也可以是一张图。
 
 ![纸与光](./paper.svg)
+
+![演示视频](./clip.mp4)
 
 > 图像来自文档所在的文件夹。
 `,
@@ -355,6 +365,31 @@ try {
     .locator(".preview img")
     .evaluate((image) => image.complete && image.naturalWidth > 0);
   if (!imageLoaded) throw new Error("relative image did not load through /media");
+  await page.locator(".preview img").click();
+  await page.waitForSelector("[data-testid='lightbox']:not([hidden])");
+  await page.waitForSelector(".lightbox-media");
+  await page.locator(".lightbox-media").click();
+  if (!(await page.locator(".lightbox-media").evaluate((image) => image.classList.contains("is-actual")))) {
+    throw new Error("image lightbox did not zoom to actual size");
+  }
+  await shot(page, "04b-lightbox.png");
+  await page.getByTestId("lightbox-close").click();
+  if ((await page.locator("[data-testid='lightbox']:not([hidden])").count()) !== 0) {
+    throw new Error("lightbox did not close");
+  }
+  await page.locator(".preview img").click();
+  await page.waitForSelector("[data-testid='lightbox']:not([hidden])");
+  await page.keyboard.press("Escape");
+  if ((await page.locator("[data-testid='lightbox']:not([hidden])").count()) !== 0) {
+    throw new Error("Escape did not close the lightbox");
+  }
+  await page.locator(".md-video video").scrollIntoViewIfNeeded();
+  await page.locator(".md-video video").click({ force: true });
+  await page.waitForSelector("[data-testid='lightbox']:not([hidden])");
+  if ((await page.locator("[data-testid='lightbox'] video").count()) !== 1) {
+    throw new Error("video was not enlarged in the lightbox");
+  }
+  await page.getByTestId("lightbox-close").click();
   await shot(page, "04-split-read-light.png");
 
   const paneCountBefore = await page.locator(".pane").count();

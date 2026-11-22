@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set "APPVER=0.3.2"
+set "APPVER=0.4.0"
 set "BASE=%~dp0"
 set "SRC="
 if exist "%BASE%Zhijian.exe" set "SRC=%BASE%"

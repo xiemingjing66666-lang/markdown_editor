@@ -121,6 +121,9 @@ class ServerTests(unittest.TestCase):
         image = self.root / "image.png"
         image.write_bytes(b"\x89PNG\r\n\x1a\n")
         self.image = image
+        video = self.root / "clip.mp4"
+        video.write_bytes(b"\x00\x00\x00\x18ftypmp42" + b"\x00" * 32)
+        self.video = video
         self.server = AppServer(self.root, port=0)
         self.base = self.server.start()
 
@@ -153,6 +156,21 @@ class ServerTests(unittest.TestCase):
         bad = f"{self.base}media?path={quote(str(text))}"
         with self.assertRaises(urllib.error.HTTPError):
             urllib.request.urlopen(bad, timeout=5)
+
+    def test_serves_video_with_range_requests(self) -> None:
+        from urllib.parse import quote
+
+        url = f"{self.base}media?path={quote(str(self.video))}"
+        with urllib.request.urlopen(url, timeout=5) as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers.get_content_type(), "video/mp4")
+            self.assertEqual(response.headers["Accept-Ranges"], "bytes")
+
+        request = urllib.request.Request(url, headers={"Range": "bytes=0-3"})
+        with urllib.request.urlopen(request, timeout=5) as response:
+            self.assertEqual(response.status, 206)
+            self.assertEqual(response.headers["Content-Range"], "bytes 0-3/44")
+            self.assertEqual(response.read(), b"\x00\x00\x00\x18")
 
     def test_rejects_traversal(self) -> None:
         with self.assertRaises(urllib.error.HTTPError):
